@@ -27,7 +27,7 @@ __version__ = 0.1
 __date__ = '23 March 2013'
 __updated__ = '2013032301'
 
-DEBUG = 0
+DEBUG = 1
 
 def checkCredentialsFilePermission(filepath):
     import stat
@@ -46,8 +46,8 @@ def getAmazonDateTime():
 
 def getSignatureAsBase64(text, key):
     import hmac, hashlib, base64
-    hm  = hmac.new(bytes(key, "utf-8"), bytes(text, "utf-8"), hashlib.sha256)
-    return base64.b64encode(hm.digest())
+    hm  = hmac.new(bytes(key, "ascii"), bytes(text, "utf-8"), hashlib.sha256)
+    return base64.b64encode(hm.digest()).decode('utf-8')
 
 def getAmazonV3AuthHeader(accessKey, signature):
     # AWS3-HTTPS AWSAccessKeyId=MyAccessKey,Algorithm=ALGORITHM,Signature=Base64( Algorithm((ValueOfDateHeader), SigningKey) )

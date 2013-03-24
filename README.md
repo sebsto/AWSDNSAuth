@@ -49,8 +49,10 @@ AWS Credentials File Format:
 Usage Example
 -------------
 
-```xml
+```bash
 sst:src sst$ ./AWSDNSAuth.py -a -c /Users/sst/.aws-secret https://route53.amazonaws.com/2012-12-12/hostedzone | xmllint --format -
+```
+```xml
 <?xml version="1.0"?>
 <ListHostedZonesResponse xmlns="https://route53.amazonaws.com/doc/2012-12-12/">
   <HostedZones>

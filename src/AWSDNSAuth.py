@@ -19,15 +19,14 @@ AWSDNSAuth is a command line tool to create an AWS Authentication v3 header for 
 import sys, os, datetime
 import configparser, logging
 
-from argparse import ArgumentParser
-from argparse import RawDescriptionHelpFormatter
+import argparse 
 
 __all__ = []
 __version__ = 0.1
 __date__ = '23 March 2013'
 __updated__ = '2013032301'
 
-DEBUG = 1
+DEBUG = 0
 
 def checkCredentialsFilePermission(filepath):
     import stat
@@ -82,12 +81,13 @@ USAGE
 
     try:
         # Setup argument parser
-        parser = ArgumentParser(description=program_license, formatter_class=RawDescriptionHelpFormatter, epilog="AWS Credentials File Format:\n\t[credentials]\n\tAWS_ACCESS_KEY=<access key>\n\tAWS_SECRET_KEY=<secret key>")
+        parser = argparse.ArgumentParser(description=program_license, formatter_class=argparse.RawDescriptionHelpFormatter, epilog="AWS Credentials File Format:\n\t[credentials]\n\tAWS_ACCESS_KEY=<access key>\n\tAWS_SECRET_KEY=<secret key>")
         parser.add_argument("-c", "--credentials", dest="credentials", action="store", required=True, help="path to a file containing AWS credentials [required]")
         parser.add_argument("-a", "--amazonDate", dest="amazonDate", action="store_true", help="use the date provided by Amazon instead of local date [default = False]", default=False )
-        parser.add_argument("curl_parameters", nargs="+", help="parameters to be passed to curl command, starting with the URL")
         parser.add_argument('-V', '--version', action='version', version=program_version_message)
         parser.add_argument("-v", "--verbose", dest="verbose", action="store_true", help="display more information during execution [default = False]", default=False )
+        parser.add_argument("curl_url", action="store", help="URL parameter to be passed to curl command")
+        parser.add_argument("curl_parameters", nargs=argparse.REMAINDER, help="parameters to be passed to curl command (-X -d ..)")
         
         # Process arguments
         args = parser.parse_args()
@@ -127,13 +127,16 @@ USAGE
         logging.debug("AWS AUTH HEADER = %s" % AWS_AUTH)
         
         import subprocess
-        return subprocess.call(["/usr/bin/curl",
-                        "-s", "-S",
+        curlCmd = ["/usr/bin/curl", "-v",
+                        #"-s", "-S",
                         "--header",
                         "X-Amzn-Authorization: %s" % AWS_AUTH,
                         "--header",
-                        "x-amz-date: %s" % AWS_DATE] +
-                        args.curl_parameters)
+                        "x-amz-date: %s" % AWS_DATE]
+        curlCmd += args.curl_parameters
+        curlCmd += [args.curl_url]
+        logging.debug(" ".join(curlCmd))                
+        return subprocess.call(curlCmd)
                         
         
     except KeyboardInterrupt:

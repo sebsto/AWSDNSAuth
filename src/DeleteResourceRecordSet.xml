@@ -1,0 +1,19 @@
+<ChangeResourceRecordSetsRequest xmlns="https://route53.amazonaws.com/doc/2012-12-12/">
+   <ChangeBatch>
+      <Changes>
+         <Change>
+            <Action>DELETE</Action>
+            <ResourceRecordSet>
+               <Name>vpn.aws.stormacq.com.</Name>
+               <Type>CNAME</Type>
+               <TTL>300</TTL>
+               <ResourceRecords>
+                  <ResourceRecord>
+                     <Value>ec2-46-137-129-136.eu-west-1.compute.amazonaws.com</Value>
+                  </ResourceRecord>
+               </ResourceRecords>
+            </ResourceRecordSet>
+         </Change>
+      </Changes>
+   </ChangeBatch>
+</ChangeResourceRecordSetsRequest>

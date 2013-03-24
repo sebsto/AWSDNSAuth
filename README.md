@@ -10,8 +10,7 @@ Usage
 -----
 
 ```
-usage: AWSDNSAuth.py [-h] -c CREDENTIALS [-a] [-V] [-v]
-                     curl_parameters [curl_parameters ...]
+usage: AWSDNSAuth.py [-h] -c CREDENTIALS [-a] [-V] [-v] curl_url ...
 
 AWSDNSAuth -- AWS Route 53 Authorization Tool
 
@@ -27,8 +26,8 @@ AWSDNSAuth -- AWS Route 53 Authorization Tool
 USAGE
 
 positional arguments:
-  curl_parameters       parameters to be passed to curl command, starting with
-                        the URL
+  curl_url              URL parameter to be passed to curl command
+  curl_parameters       parameters to be passed to curl command (-X -d ..)
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -41,9 +40,9 @@ optional arguments:
                         False]
 
 AWS Credentials File Format:
-  [credentials]
-	AWS_ACCESS_KEY=<access key>
-	AWS_SECRET_KEY=<secret key>
+    [credentials]
+    AWS_ACCESS_KEY=<access key>
+    AWS_SECRET_KEY=<secret key>
 ```
   
 Usage Example

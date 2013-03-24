@@ -7,9 +7,9 @@ This is a python script that creates proper AWS Route 53 HTTP headers before cal
 
 
 Usage
-=====
+-----
 
-'''
+```
 usage: AWSDNSAuth.py [-h] -c CREDENTIALS [-a] [-V] [-v]
                      curl_parameters [curl_parameters ...]
 
@@ -44,11 +44,12 @@ AWS Credentials File Format:
   [credentials]
 	AWS_ACCESS_KEY=<access key>
 	AWS_SECRET_KEY=<secret key>
-'''  
+```
   
 Usage Example
-=============
+-------------
 
+```xml
 sst:src sst$ ./AWSDNSAuth.py -a -c /Users/sst/.aws-secret https://route53.amazonaws.com/2012-12-12/hostedzone | xmllint --format -
 <?xml version="1.0"?>
 <ListHostedZonesResponse xmlns="https://route53.amazonaws.com/doc/2012-12-12/">
@@ -66,4 +67,4 @@ sst:src sst$ ./AWSDNSAuth.py -a -c /Users/sst/.aws-secret https://route53.amazon
   <IsTruncated>false</IsTruncated>
   <MaxItems>100</MaxItems>
 </ListHostedZonesResponse>
-
+```

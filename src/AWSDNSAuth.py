@@ -26,7 +26,7 @@ __version__ = 0.1
 __date__ = '23 March 2013'
 __updated__ = '2013032301'
 
-DEBUG = 0
+DEBUG = 1
 
 def checkCredentialsFilePermission(filepath):
     import stat
@@ -127,8 +127,9 @@ USAGE
         logging.debug("AWS AUTH HEADER = %s" % AWS_AUTH)
         
         import subprocess
-        curlCmd = ["/usr/bin/curl", "-v",
-                        #"-s", "-S",
+        curlCmd = ["/usr/bin/curl",
+                        "-v" if DEBUG else "",
+                        "-s", "-S",
                         "--header",
                         "X-Amzn-Authorization: %s" % AWS_AUTH,
                         "--header",

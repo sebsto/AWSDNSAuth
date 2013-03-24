@@ -9,6 +9,7 @@ This is a python script that creates proper AWS Route 53 HTTP headers before cal
 Usage
 =====
 
+'''
 usage: AWSDNSAuth.py [-h] -c CREDENTIALS [-a] [-V] [-v]
                      curl_parameters [curl_parameters ...]
 
@@ -43,7 +44,7 @@ AWS Credentials File Format:
   [credentials]
 	AWS_ACCESS_KEY=<access key>
 	AWS_SECRET_KEY=<secret key>
-  
+'''  
   
 Usage Example
 =============

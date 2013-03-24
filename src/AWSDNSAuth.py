@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#! /usr/bin/env python3.3
 # encoding: utf-8
 '''
 AWSDNSAuth -- AWS Route 53 Authorization Tool
@@ -17,7 +17,7 @@ AWSDNSAuth is a command line tool to create an AWS Authentication v3 header for 
 '''
 
 import sys, os, datetime
-import ConfigParser, logging
+import configparser, logging
 
 from argparse import ArgumentParser
 from argparse import RawDescriptionHelpFormatter
@@ -29,17 +29,24 @@ __updated__ = '2013032301'
 
 DEBUG = 0
 
+def checkCredentialsFilePermission(filepath):
+    import stat
+    st = os.stat(filepath)
+    return bool(st.st_mode & stat.S_IMODE(0o600))
+
 def getLocalDateTime():
     return datetime.datetime.today().strftime("%a, %d %b %Y %H:%M:%S %Z")
 
 def getAmazonDateTime():
-    import urllib2
-    headers=urllib2.urlopen("https://route53.amazonaws.com/date").info()
-    return headers['Date']
+    import urllib.request
+    httpResponse=urllib.request.urlopen("https://route53.amazonaws.com/date")
+    httpHeaders=httpResponse.info()
+    logging.debug(httpHeaders)
+    return httpHeaders['Date']
 
 def getSignatureAsBase64(text, key):
     import hmac, hashlib, base64
-    hm  = hmac.new(key, text, hashlib.sha256)
+    hm  = hmac.new(bytes(key, "utf-8"), bytes(text, "utf-8"), hashlib.sha256)
     return base64.b64encode(hm.digest())
 
 def getAmazonV3AuthHeader(accessKey, signature):
@@ -89,10 +96,12 @@ USAGE
             logging.getLogger().setLevel(logging.INFO)
         
         # Read AWS credentials
-        # TODO should check file permission and refuse to start when config file is not 600 or 400
+        if not checkCredentialsFilePermission(args.credentials):
+            logging.warning("Credential file must be restricted to your own user, use chmod 600 %s" % args.credentials)
+            sys.exit(-1)
         logging.info("Reading configuration from %s" % args.credentials)
-        config = ConfigParser.SafeConfigParser()
-        config.read([args.credentials, os.path.expanduser('~/%s' % args.credentials)])
+        config = configparser.SafeConfigParser()
+        config.read(args.credentials)
         
         AWS_ACCESS_KEY=config.get("credentials", "AWS_ACCESS_KEY") 
         AWS_SECRET_KEY=config.get("credentials", "AWS_SECRET_KEY") 
@@ -141,7 +150,7 @@ USAGE
 if __name__ == "__main__":
     if DEBUG:
         #sys.argv.append("-h")
-        sys.argv.append("-v")
+        #sys.argv.append("-v")
         logging.getLogger().setLevel(logging.DEBUG)
         
     sys.exit(main())

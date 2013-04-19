@@ -69,3 +69,5 @@ sst:src sst$ ./AWSDNSAuth.py -a -c /Users/sst/.aws-secret https://route53.amazon
   <MaxItems>100</MaxItems>
 </ListHostedZonesResponse>
 ```
+
+More details at http://www.stormacq.com/python-script-for-aws-route-53-api-authentication/
